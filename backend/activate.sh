@@ -15,6 +15,9 @@ if [ ! -d "./venv/" ]; then
     pip install -r requirements.txt
 fi
 
+unalias python
+
 echo "Activating environment..."
 source ./venv/bin/activate
 echo "Current python location:" "$(which python)"
+
