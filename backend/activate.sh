@@ -6,6 +6,8 @@
 # Requirements: python 3.11
 # Usage: $ source ./setup.sh
 
+alias python=python3
+
 if [ ! -d "./venv/" ]; then
     echo "Installing dependencies..."
     python -m venv ./venv/
