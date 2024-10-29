@@ -4,3 +4,7 @@ __pycache__/
 # django
 *.log
 local_settings.py
+*.sqlite3
+
+# ruff
+.ruff_cache
