@@ -1,7 +1,7 @@
 # This script automatically checks if a virtual environment named `venv` exists
 # in the project, creating and installing dependencies if it doesn't and
 # activating the virtual environment if it does.
-# Requirements: python 3.11
+# Requirements: python 3.11+
 # Usage: . .\setup.ps1
 
 if (-not (Test-Path -Path ".\venv")) {
