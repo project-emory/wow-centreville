@@ -1,4 +1,8 @@
+from datetime import timezone
+
 from django.db import models
+
+
 
 class User(models.Model):
     phone_number = models.CharField(max_length=20, primary_key=True)
@@ -30,3 +34,10 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('order', 'menu_item')
+
+
+
+

@@ -15,13 +15,13 @@ class OrderSerializer(serializers.Serializer):
     pass
 
 
-class OrderItemSerializer(serializers.Serializer):
+class MenuItemSerializer(serializers.Serializer):
     """Serializer for the OrderItem model."""
 
     pass
 
 
-class MenuItemSerializer(serializers.Serializer):
+class OrderItemSerializer(serializers.Serializer):
     """Serializer for the MenuItem model."""
     class Meta:
         model = OrderItem
@@ -39,4 +39,5 @@ class MenuItemSerializer(serializers.Serializer):
             raise serializers.ValidationError(f"The menu item '{menu_item.name}' is currently unavailable.")
 
         return data
+
 
