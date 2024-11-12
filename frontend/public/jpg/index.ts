@@ -1,0 +1,9 @@
+export { default as RedPhoneWOWLogo } from "./001티셔츠이미지_레드_전번추가.jpg";
+export { default as RedWOWHeaderLogo } from "./redwow.png";
+export { default as RedWOWLogo } from "./redfreshmeat.png";
+export { default as WhitePhoneWOWLogo } from "./001티셔츠이미지_화이트_전번추가.jpg";
+export { default as WhiteWOWLogo } from "./bwfreshmeat.jpg";
+export { default as main1 } from "./main1.jpeg";
+export { default as main2 } from "./main2.jpg";
+export { default as banchan } from "./banchan.jpeg";
+export { default as WowMommy } from "./wowmommy.png";
