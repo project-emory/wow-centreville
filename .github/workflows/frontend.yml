@@ -1,29 +1,29 @@
 name: Frontend Actions
 on:
-  push: 
-    paths: 
+  push:
+    paths:
       - "!backend/**"
       - "frontend/**"
-  pull_request: 
+  pull_request:
     branches:
       - main
       - dev
 
-defaults: 
-  run: 
+defaults:
+  run:
     working-directory: frontend
 
-jobs: 
-  lint: 
-    runs-on: ubuntu-latest 
-    steps: 
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v4
       - run: |
           npm install 
           npm run lint
-  # build: 
+  # build:
   #   runs-on: ubuntu-latest
-  #   steps: 
+  #   steps:
   #     - uses: actions/checkout@v4
   #     - run: |
   #         npm install
