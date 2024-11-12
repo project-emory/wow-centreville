@@ -10,7 +10,18 @@ class User(models.Model):
 class Order(models.Model):
     """Model for user orders."""
 
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    menu_items = models.ManyToManyField(MenuItem, through="OrderItem")
+    payment_status = models.CharField(max_length=20, default="unpaid")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_amount(self):
+        return sum(item.price for item in self.menu_items.all())
+
+    class Meta:
+        ordering = ["-created_at"]
 
 
 class OrderItem(models.Model):
@@ -21,5 +32,3 @@ class OrderItem(models.Model):
 
 class MenuItem(models.Model):
     """Model for menu items."""
-
-    pass
