@@ -25,12 +25,31 @@ const RootLayout = ({
     return (
         <html lang="en">
             <head>
-                <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.v1.png" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.v1.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.v1.png" />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="96x96"
+                    href="/favicon/favicon-96x96.v1.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="32x32"
+                    href="/favicon/favicon-32x32.v1.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="16x16"
+                    href="/favicon/favicon-16x16.v1.png"
+                />
                 <link rel="icon" type="image/svg+xml" href="/favicon/favicon.v1.svg" />
                 <link rel="shortcut icon" href="/favicon/favicon.v1.ico" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.v1.png" />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="180x180"
+                    href="/favicon/apple-touch-icon.v1.png"
+                />
                 <meta name="apple-mobile-web-app-title" content="WOW" />
                 <link rel="manifest" href="/favicon/site.v1.webmanifest" />
             </head>
