@@ -8,3 +8,7 @@ local_settings.py
 
 # ruff
 .ruff_cache
+
+# misc
+.DS_Store
+*.pem

@@ -1,25 +1,21 @@
 name: Backend Actions
-on: 
-    push: 
-        paths:
-            - "backend/**"
-            - "!frontend/**"
-    pull_request:
-        branches: 
-            - main
-            - dev 
-defaults: 
-    run:
-        working-directory: backend
-jobs: 
-    lint:
-        runs-on: ubuntu-latest
-        steps: 
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v4
-              with: 
-                python-version: '3.12'
-            - run: |
-                ruff backend/
-
-
+on:
+  push:
+    paths:
+      - "backend/**"
+      - "!frontend/**"
+  pull_request:
+    branches:
+      - main
+      - dev
+defaults:
+  run:
+    working-directory: backend
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v1
+        with:
+          src: "./backend"

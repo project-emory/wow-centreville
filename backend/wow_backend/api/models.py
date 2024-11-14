@@ -7,6 +7,17 @@ def phone_validator(x):
 
     
 
+class TestUser(models.Model):
+    """
+    Test user model for initial set up.
+
+    TODO: remove once other models are created
+    """
+
+    name = models.CharField(max_length=32)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class User(models.Model):
     """Model for site users."""
     username = models.CharField(max_length=25)
