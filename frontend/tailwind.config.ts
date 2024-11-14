@@ -11,6 +11,12 @@ const config: Config = {
             colors: {
                 background: "var(--background)",
                 foreground: "var(--foreground)",
+                "wow-red": "#C61C00",
+                "wow-cream": "#F3EDE1",
+                "wow-black": "#191918",
+            },
+            fontFamily: {
+                antonio: ["var(--font-antonio)", "sans-serif"],
             },
         },
     },
