@@ -2,7 +2,7 @@ from rest_framework import serializers
 from api.models import TestUser, User, Order, OrderItem, MenuItem
 
 
-class TestUserSerializer(serializers.Serializer):
+class TestUserSerializer(serializers.ModelSerializer):
     """
     Test user serializer for initial setup.
 
@@ -11,7 +11,7 @@ class TestUserSerializer(serializers.Serializer):
 
     class Meta:
         model = TestUser
-        fields = ["url", "name", "created_at"]
+        fields = ["id", "name", "created_at"]
 
 
 class UserSerializer(serializers.Serializer):
