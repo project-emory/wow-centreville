@@ -1,11 +1,13 @@
+from datetime import timezone
+
 from django.db import models
 import re
+
 
 def phone_validator(x):
     y = re.search(r"\d{10}", x)
     return bool(y)
 
-    
 
 class TestUser(models.Model):
     """
@@ -20,10 +22,23 @@ class TestUser(models.Model):
 
 class User(models.Model):
     """Model for site users."""
+
+    phone_number = models.CharField(
+        max_length=20, primary_key=True, validators=phone_validator
+    )
     username = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    phone_number = models.CharField(max_length=20, primary_key=True, validators=phone_validator)
+
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    is_available = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
 class Order(models.Model):
     """Model for user orders."""
@@ -43,10 +58,13 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    """Intermediary model for items in a user's orders."""
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="order_items"
+    )
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    pass
-
-
-class MenuItem(models.Model):
-    """Model for menu items."""
+    class Meta:
+        unique_together = ("order", "menu_item")
