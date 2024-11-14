@@ -4,8 +4,10 @@ from api.models import User, Order, OrderItem, MenuItem
 
 class UserSerializer(serializers.Serializer):
     """Serializer for the User model."""
-
-    pass
+    class Meta:
+        model = User
+        fields = ['username', 'phone_number', 'created_at', 'updated_at']
+    
 
 
 class OrderSerializer(serializers.Serializer):
