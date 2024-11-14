@@ -12,7 +12,7 @@ class User(models.Model):
     username = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    phone_number = models.CharField(max_length=20, primary_key=True, validators=phone_validator)
 
 class Order(models.Model):
     """Model for user orders."""
