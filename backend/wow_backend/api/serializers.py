@@ -22,10 +22,14 @@ class UserSerializer(serializers.Serializer):
     
 
 
-class OrderSerializer(serializers.Serializer):
+class OrderSerializer(serializers.ModelSerializer):
     """Serializer for the Order model."""
 
-    pass
+    total_amount = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Order
+        fields = "__all__"
 
 
 class OrderItemSerializer(serializers.Serializer):
