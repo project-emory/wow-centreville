@@ -2,7 +2,7 @@
 # in the project, creating and installing dependencies if it doesn't and
 # activating the virtual environment if it does.
 # Requirements: python 3.11+
-# Usage: . .\setup.ps1
+# Usage: . .\activate.ps1
 
 if (-not (Test-Path -Path ".\venv")) {
     Write-Host "Installing dependencies..."

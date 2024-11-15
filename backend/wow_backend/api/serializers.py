@@ -2,25 +2,50 @@ from rest_framework import serializers
 from api.models import User, Order, OrderItem, MenuItem
 
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User model."""
 
-    pass
+    class Meta:
+        model = User
+        fields = "__all__"
 
 
-class OrderSerializer(serializers.Serializer):
+class OrderSerializer(serializers.ModelSerializer):
     """Serializer for the Order model."""
 
-    pass
+    total_amount = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Order
+        fields = "__all__"
 
 
-class OrderItemSerializer(serializers.Serializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     """Serializer for the OrderItem model."""
 
-    pass
+    class Meta:
+        model = MenuItem
+        fields = "__all__"
 
 
-class MenuItemSerializer(serializers.Serializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     """Serializer for the MenuItem model."""
 
-    pass
+    class Meta:
+        model = OrderItem
+        fields = "__all__"
+
+    def validate_quantity(self, value):
+        if value < 1:
+            raise serializers.ValidationError("Quantity must be greater than 1.")
+        return value
+
+    def validate(self, data):
+        menu_item = data.get("menu_item")
+
+        if not menu_item.is_available:
+            raise serializers.ValidationError(
+                f"The menu item '{menu_item.name}' is currently unavailable."
+            )
+
+        return data
