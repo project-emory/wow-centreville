@@ -6,10 +6,6 @@ on:
     paths:
       - "!backend/**"
       - "frontend/**"
-  pull_request:
-    paths:
-      - "!backend/**"
-      - "frontend/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
