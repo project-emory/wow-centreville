@@ -1,25 +1,13 @@
 from rest_framework import serializers
-from api.models import TestUser, User, Order, OrderItem, MenuItem
+from api.models import User, Order, OrderItem, MenuItem
 
 
-class TestUserSerializer(serializers.ModelSerializer):
-    """
-    Test user serializer for initial setup.
-
-    TODO: remove once other serializers are created
-    """
-
-    class Meta:
-        model = TestUser
-        fields = ["id", "name", "created_at"]
-
-
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User model."""
 
     class Meta:
         model = User
-        fields = ["username", "phone_number", "created_at", "updated_at"]
+        fields = "__all__"
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -32,7 +20,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MenuItemSerializer(serializers.Serializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     """Serializer for the OrderItem model."""
 
     class Meta:
@@ -40,12 +28,12 @@ class MenuItemSerializer(serializers.Serializer):
         fields = "__all__"
 
 
-class OrderItemSerializer(serializers.Serializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     """Serializer for the MenuItem model."""
 
     class Meta:
         model = OrderItem
-        fields = ["order", "menu_item", "quantity", "created_at", "updated_at"]
+        fields = "__all__"
 
     def validate_quantity(self, value):
         if value < 1:
