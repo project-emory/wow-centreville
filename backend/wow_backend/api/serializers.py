@@ -35,7 +35,9 @@ class OrderSerializer(serializers.ModelSerializer):
 class MenuItemSerializer(serializers.Serializer):
     """Serializer for the OrderItem model."""
 
-    pass
+    class Meta:
+        model = MenuItem
+        fields = "__all__"
 
 
 class OrderItemSerializer(serializers.Serializer):

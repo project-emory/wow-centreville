@@ -12,8 +12,8 @@ os.environ.setdefault(
 django.setup()
 
 # Now import your serializers and models
-from backend.wow_backend.api.models import User, MenuItem, Order, OrderItem
-from backend.wow_backend.api.serializers import OrderItemSerializer
+from backend.wow_backend.api.models import User, MenuItem, Order, OrderItem  # noqa: E402
+from backend.wow_backend.api.serializers import OrderItemSerializer  # noqa: E402
 
 
 def main():
