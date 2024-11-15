@@ -1,4 +1,4 @@
-name: Deploy Next.js site to Pages
+name: Build + Deploy Next.js site
 
 on:
   push:
@@ -23,8 +23,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Build job
+  # Build job (always runs, will confirm if frontend builds properly)
   build:
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
