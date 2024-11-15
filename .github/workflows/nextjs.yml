@@ -3,8 +3,12 @@ name: Build + Deploy Next.js site
 on:
   push:
     paths:
-      - "!backend/**"
       - "frontend/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
