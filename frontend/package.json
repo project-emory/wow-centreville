@@ -10,7 +10,8 @@
         "format": "prettier --write ."
     },
     "dependencies": {
-        "next": "15.0.0",
+        "i18next": "^23.16.6",
+        "next": "^15.0.0",
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.8",
         "react": "19.0.0-rc-65a56d0e-20241020",
