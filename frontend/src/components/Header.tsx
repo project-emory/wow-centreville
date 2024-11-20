@@ -5,42 +5,42 @@ import { RedWOWHeaderLogo, globe, cart, user } from "@/public";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import {
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/src/components/ui';
-import '@/src/libs/i18n';
-import { useTranslation } from 'react-i18next'; 
+} from "@/src/components/ui";
+import "@/src/libs/i18n";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
     const { push } = useRouter();
     const pathname = usePathname();
     const icons = [cart, user];
     const [currSection, setCurrSection] = useState("");
-    const { i18n, t } = useTranslation('header');
-    const [ language, setLanguage ] = useState('en');
+    const { i18n, t } = useTranslation("header");
+    const [language, setLanguage] = useState("en");
 
     const sections = [
-        { label: t('menu.1'), url: '/about' },
-        { label: t('menu.2'), url: '/' }, 
-        { label: t('menu.3'), url: '/menu'},
+        { label: t("menu.1"), url: "/about" },
+        { label: t("menu.2"), url: "/" },
+        { label: t("menu.3"), url: "/menu" },
     ];
 
     const changeLanguage = (lang: string) => {
-        console.log('Changing language to:', lang);
+        console.log("Changing language to:", lang);
         i18n.changeLanguage(lang);
-        setLanguage(lang); 
+        setLanguage(lang);
     };
 
     useEffect(() => {
         const pathMap: { [key: string]: string } = {
-            '/': t('menu.2'),
-            '/about': t('menu.1'),
-            '/menu': t('menu.3')
+            "/": t("menu.2"),
+            "/about": t("menu.1"),
+            "/menu": t("menu.3"),
         };
-        
-        const path = pathMap[pathname]; 
+
+        const path = pathMap[pathname];
         setCurrSection(path);
     }, [pathname, t]);
 
@@ -77,13 +77,26 @@ const Header = () => {
                         <div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="focus:outline-none">
-                                    <Image key={18} src={globe} alt='language setting' width={32} height={32} className="cursor-pointer transition-transform duration-300 hover:scale-110"/>
+                                    <Image
+                                        key={18}
+                                        src={globe}
+                                        alt="language setting"
+                                        width={32}
+                                        height={32}
+                                        className="cursor-pointer transition-transform duration-300 hover:scale-110"
+                                    />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="flex-col flex items-center bg-white border-none">
-                                    <DropdownMenuItem onClick={() => changeLanguage('ko')} className={`${language==='en' ? 'text-wow-black' : 'text-wow-red'} text-lg font-bold`}>
+                                <DropdownMenuContent className="flex flex-col items-center border-none bg-white">
+                                    <DropdownMenuItem
+                                        onClick={() => changeLanguage("ko")}
+                                        className={`${language === "en" ? "text-wow-black" : "text-wow-red"} text-lg font-bold`}
+                                    >
                                         한국어
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => changeLanguage('en')} className={`${language==='ko' ? 'text-wow-black' : 'text-wow-red'} text-lg font-bold`}>
+                                    <DropdownMenuItem
+                                        onClick={() => changeLanguage("en")}
+                                        className={`${language === "ko" ? "text-wow-black" : "text-wow-red"} text-lg font-bold`}
+                                    >
                                         English
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>

@@ -34,7 +34,7 @@ const Footer = () => {
                     <Image
                         src={WowMommy}
                         alt="white wow logo"
-                        className="h-[15rem] w-[15rem] rounded-full object-cover object-left"
+                        className="h-[15rem] w-[15rem] object-contain object-left"
                     />
                 </div>
             </div>

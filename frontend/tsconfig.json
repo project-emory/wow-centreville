@@ -21,7 +21,7 @@
         "paths": {
             "@/*": ["./*"],
             "@/i18n/*": ["./public/i18n/*"],
-            "@/libs/*": ["./src/libs/*"],
+            "@/libs/*": ["./src/libs/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
