@@ -10,7 +10,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/src/components/ui";
-import "@/src/libs/i18n";
 import { useTranslation } from "react-i18next";
 
 const Header = () => {

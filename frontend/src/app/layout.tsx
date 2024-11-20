@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Antonio } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/src/components";
+import Provider from "./provider";
 
 const antonio = Antonio({
     subsets: ["latin"],
@@ -56,9 +57,11 @@ const RootLayout = ({
             <body
                 className={`${antonio.variable} ' flex min-h-screen flex-col bg-[#F3EDE1] font-antonio text-black antialiased`}
             >
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
+                <Provider>
+                    <Header />
+                    <main className="flex-1">{children}</main>
+                    <Footer />
+                </Provider>
             </body>
         </html>
     );
