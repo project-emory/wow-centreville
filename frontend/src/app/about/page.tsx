@@ -5,7 +5,7 @@ import { Button } from "@/src/components";
 import { useTranslation } from "react-i18next";
 
 const About = () => {
-    const { t, i18n } = useTranslation("about");
+    const { t } = useTranslation("about");
     return (
         <div className="mt-[2.5rem] flex min-h-screen w-full justify-center overflow-x-hidden py-[4.75rem]">
             <div className="flex w-[55vw] flex-col items-center justify-center gap-8">

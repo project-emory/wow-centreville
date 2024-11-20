@@ -5,7 +5,7 @@ import { WowMommy, insta } from "@/public";
 import { useTranslation } from "react-i18next";
 
 const Footer = () => {
-    const { t, i18n } = useTranslation("footer");
+    const { t } = useTranslation("footer");
 
     return (
         <footer className="flex h-[40vh] w-full justify-center bg-wow-black font-bold text-wow-cream">

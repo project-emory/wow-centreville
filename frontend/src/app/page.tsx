@@ -6,7 +6,7 @@ import { main1, main2 } from "@/public";
 import { useTranslation } from "react-i18next";
 
 export default function Home() {
-    const { i18n, t } = useTranslation("home");
+    const { t } = useTranslation("home");
     return (
         <div className="min-h-screen justify-items-center py-[4.75rem]">
             <main className="mb-20 flex w-[60vw] flex-col items-center gap-8 overflow-x-hidden pt-8 sm:items-start">
