@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="flex w-[60vw] items-center justify-between px-[1rem]">
                 <div className="flex flex-col gap-[2rem]">
                     <div className="flex flex-1 items-end gap-[1rem]">
-                        <div className="text-2xl">{t('contact.1')}</div>
+                        <div className="text-2xl">{t("contact.1")}</div>
                         <a
                             href="https://www.instagram.com/centreville_wow/?hl=en"
                             target="_blank"
@@ -28,10 +28,10 @@ const Footer = () => {
                         </a>
                     </div>
                     <div className="flex flex-1 flex-col justify-between gap-[1rem] text-sm tracking-wider">
-                        <p>{t('contact.2')}: 14215 M Centreville Sq. Centreville VA 20121</p>
-                        <p>{t('contact.3')}: 571-243-3639</p>
-                        <p>{t('contact.4')}: 와우엄마밥상</p>
-                        <p>{t('contact.5')}: 9am-8pm</p>
+                        <p>{t("contact.2")}: 14215 M Centreville Sq. Centreville VA 20121</p>
+                        <p>{t("contact.3")}: 571-243-3639</p>
+                        <p>{t("contact.4")}: 와우엄마밥상</p>
+                        <p>{t("contact.5")}: 9am-8pm</p>
                     </div>
                 </div>
                 <div className="flex gap-[1rem]">
