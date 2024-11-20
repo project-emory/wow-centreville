@@ -3,5 +3,5 @@ export {
     DropdownMenu,
     DropdownMenuTrigger,
     DropdownMenuContent,
-    DropdownMenuItem
+    DropdownMenuItem,
 } from "./dropdown-menu";
