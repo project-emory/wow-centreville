@@ -20,7 +20,9 @@ class OrderItemSerializer(serializers.Serializer):
     pass
 
 
-class MenuItemSerializer(serializers.Serializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     """Serializer for the MenuItem model."""
-
+    class Meta:
+        model = MenuItem
+        fields = ['id', 'name', 'description', 'price', 'is_available', 'created_at', 'updated_at']
     pass
