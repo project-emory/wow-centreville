@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const About = () => {
     const { t } = useTranslation("about");
     return (
-        <div className="flex min-h-screen w-full justify-center overflow-x-hidden py-[4.75rem] md:mt-[2.5rem]">
+        <div className="flex min-h-screen w-full justify-center overflow-x-hidden py-[4.75rem] mt-[2.5rem]">
             <div className="flex w-[55vw] flex-col items-center justify-center gap-8">
                 <Image
                     src={RedWOWLogo}
