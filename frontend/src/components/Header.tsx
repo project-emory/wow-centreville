@@ -78,7 +78,7 @@ const Header = () => {
                             })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <div className="font-bold lg:text-3xl text-2xl">WOW-CENTREVILLE</div>
+                    <div className="font-bold lg:text-3xl md:text-[3.7vw] text-[5vw]">WOW-CENTREVILLE</div>
                 </div>
                 <ul className="md:flex gap-[2rem] hidden">
                     {sections.map(section => {
