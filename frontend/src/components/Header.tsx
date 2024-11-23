@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { RedWOWHeaderLogo, globe, cart, user } from "@/public";
+import { RedWOWHeaderLogo, globe, cart, user, menu } from "@/public";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -46,15 +46,40 @@ const Header = () => {
     return (
         <header className="fixed top-0 z-10 flex h-[4.75rem] w-full justify-center border-b-[1px] border-black bg-wow-cream font-antonio text-[2rem]">
             <div className="flex w-[80rem] items-center justify-between px-[1rem]">
-                <div className="flex flex-1 items-center gap-[1rem]">
+                <div className="flex flex-1 items-center lg:gap-[1rem] gap-[0.5rem]">
                     <Image
                         src={RedWOWHeaderLogo}
                         alt="White WOW Logo"
-                        className="h-12 w-[3rem] object-cover object-left"
+                        className="hidden md:block h-12 w-12 object-cover object-left"
                     />
-                    <div className="font-bold">WOW-CENTREVILLE</div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="focus:outline-none">
+                            <Image
+                                key={111}
+                                src={menu}
+                                alt="menu icon for mobile"
+                                className="md:hidden h-8 w-8 object-cover object-left cursor-pointer transition-transform duration-300 hover:scale-110"
+                            />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="flex flex-col items-center border-none bg-white">
+                            {sections.map(section => {
+                                return (
+                                    <DropdownMenuItem
+                                        onClick={() => push(section.url)}
+                                        key={section.label}
+                                        className={`text-lg font-bold ${
+                                            currSection===section.label ? "text-wow-red" : "text-black"
+                                        }`}
+                                    >
+                                        {section.label}
+                                    </DropdownMenuItem>
+                                );
+                            })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <div className="font-bold lg:text-3xl text-2xl">WOW-CENTREVILLE</div>
                 </div>
-                <ul className="flex gap-[2rem]">
+                <ul className="md:flex gap-[2rem] hidden">
                     {sections.map(section => {
                         return (
                             <li
