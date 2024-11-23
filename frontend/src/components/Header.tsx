@@ -50,7 +50,8 @@ const Header = () => {
                     <Image
                         src={RedWOWHeaderLogo}
                         alt="White WOW Logo"
-                        className="hidden md:block h-12 w-12 object-cover object-left"
+                        onClick={() => push("/")}
+                        className="cursor-pointer hidden md:block h-12 w-12 object-cover object-left"
                     />
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">
