@@ -52,6 +52,7 @@ const RootLayout = ({
                     href="/favicon/apple-touch-icon.v1.png"
                 />
                 <meta name="apple-mobile-web-app-title" content="WOW" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="manifest" href="/favicon/site.v1.webmanifest" />
             </head>
             <body
