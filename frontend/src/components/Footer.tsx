@@ -9,8 +9,8 @@ const Footer = () => {
 
     return (
         <footer className="flex h-[40vh] w-full justify-center bg-wow-black font-bold text-wow-cream">
-            <div className="flex w-[60vw] items-center justify-between px-[1rem]">
-                <div className="flex flex-col gap-[2rem]">
+            <div className="md:flex max-md:pt-16 w-[60vw] items-center justify-between px-[1rem]">
+                <div className="flex flex-col md:text-left max-md:items-center text-center gap-[2rem]">
                     <div className="flex flex-1 items-end gap-[1rem]">
                         <div className="text-2xl">{t("contact.1")}</div>
                         <a
@@ -34,7 +34,7 @@ const Footer = () => {
                         <p>{t("contact.5")}: 9am-8pm</p>
                     </div>
                 </div>
-                <div className="flex gap-[1rem]">
+                <div className="flex justify-center gap-[1rem]">
                     <Image
                         src={WowMommy}
                         alt="white wow logo"
