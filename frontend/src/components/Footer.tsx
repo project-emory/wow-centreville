@@ -8,7 +8,7 @@ const Footer = () => {
     const { t } = useTranslation("footer");
 
     return (
-        <footer className="flex h-[40vh] w-full justify-center bg-wow-black font-bold text-wow-cream">
+        <footer className="flex min-h-[40vh] w-full justify-center bg-wow-black font-bold text-wow-cream">
             <div className="md:flex max-md:pt-16 w-[60vw] items-center justify-between px-[1rem]">
                 <div className="flex flex-col md:text-left max-md:items-center text-center gap-[2rem]">
                     <div className="flex flex-1 items-end gap-[1rem]">
