@@ -46,12 +46,12 @@ const Header = () => {
     return (
         <header className="fixed top-0 z-10 flex h-[4.75rem] w-full justify-center border-b-[1px] border-black bg-wow-cream font-antonio text-[2rem]">
             <div className="flex w-[80rem] items-center justify-between px-[1rem]">
-                <div className="flex flex-1 items-center lg:gap-[1rem] gap-[0.5rem]">
+                <div className="flex flex-1 items-center gap-[0.5rem] lg:gap-[1rem]">
                     <Image
                         src={RedWOWHeaderLogo}
                         alt="White WOW Logo"
                         onClick={() => push("/")}
-                        className="cursor-pointer hidden md:block h-12 w-12 object-cover object-left"
+                        className="hidden h-12 w-12 cursor-pointer object-cover object-left md:block"
                     />
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">
@@ -59,7 +59,7 @@ const Header = () => {
                                 key={111}
                                 src={menu}
                                 alt="menu icon for mobile"
-                                className="md:hidden h-8 w-8 object-cover object-left cursor-pointer transition-transform duration-300 hover:scale-110"
+                                className="h-8 w-8 cursor-pointer object-cover object-left transition-transform duration-300 hover:scale-110 md:hidden"
                             />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="flex flex-col items-center border-none bg-white">
@@ -69,7 +69,9 @@ const Header = () => {
                                         onClick={() => push(section.url)}
                                         key={section.label}
                                         className={`text-lg font-bold ${
-                                            currSection===section.label ? "text-wow-red" : "text-black"
+                                            currSection === section.label
+                                                ? "text-wow-red"
+                                                : "text-black"
                                         }`}
                                     >
                                         {section.label}
@@ -78,9 +80,11 @@ const Header = () => {
                             })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <div className="font-bold lg:text-3xl md:text-[3.7vw] text-[5vw]">WOW-CENTREVILLE</div>
+                    <div className="text-[5vw] font-bold md:text-[3.7vw] lg:text-3xl">
+                        WOW-CENTREVILLE
+                    </div>
                 </div>
-                <ul className="md:flex gap-[2rem] hidden">
+                <ul className="hidden gap-[2rem] md:flex">
                     {sections.map(section => {
                         return (
                             <li

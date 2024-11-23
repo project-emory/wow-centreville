@@ -9,8 +9,8 @@ const Footer = () => {
 
     return (
         <footer className="flex min-h-[40vh] w-full justify-center bg-wow-black font-bold text-wow-cream">
-            <div className="md:flex max-md:pt-16 w-[60vw] items-center justify-between px-[1rem]">
-                <div className="flex flex-col md:text-left max-md:items-center text-center gap-[2rem]">
+            <div className="w-[60vw] items-center justify-between px-[1rem] max-md:pt-16 md:flex">
+                <div className="flex flex-col gap-[2rem] text-center max-md:items-center md:text-left">
                     <div className="flex flex-1 items-end gap-[1rem]">
                         <div className="text-2xl">{t("contact.1")}</div>
                         <a
