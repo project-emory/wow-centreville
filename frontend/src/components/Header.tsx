@@ -80,7 +80,7 @@ const Header = () => {
                             })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <div className="text-[5vw] font-bold md:text-[3.7vw] lg:text-3xl">
+                    <div className="text-[1.3rem] sm:text-[1.5rem] font-bold lg:text-3xl">
                         WOW-CENTREVILLE
                     </div>
                 </div>
