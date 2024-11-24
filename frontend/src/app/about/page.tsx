@@ -14,7 +14,11 @@ const About = () => {
                     alt="White WOW Logo"
                     className="h-[10rem] w-[10.5rem] object-cover object-left"
                 />
-                <div className={`${i18n.language === 'ko' ? "text-[2rem]" : "text-[2.5rem]"} md:text-[3rem] font-bold text-wow-red`}>{t("title")}</div>
+                <div
+                    className={`${i18n.language === "ko" ? "text-[2rem]" : "text-[2.5rem]"} font-bold text-wow-red md:text-[3rem]`}
+                >
+                    {t("title")}
+                </div>
                 <p className="text-center leading-8">
                     {t("description.1")} <br />
                     {t("description.2")}

@@ -33,7 +33,11 @@ export default function Home() {
                     </div>
                     <div className="order-1 flex flex-col items-center text-right font-bold leading-[6rem] text-wow-red md:order-2 md:block md:leading-[7.5rem]">
                         <div className="text-[6rem] sm:text-[7rem]">WOW</div>
-                        <div className={`${i18n.language === 'ko' ? "sm:text-[4rem]" : "sm:text-[5rem]"} text-[4rem]`}>{t("WOW.2")}</div>
+                        <div
+                            className={`${i18n.language === "ko" ? "sm:text-[4rem]" : "sm:text-[5rem]"} text-[4rem]`}
+                        >
+                            {t("WOW.2")}
+                        </div>
                     </div>
                 </div>
                 <div className="-mt-8 flex w-full animate-bounce flex-col items-center text-[3rem] font-bold text-wow-red">
