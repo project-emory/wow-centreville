@@ -102,7 +102,7 @@ const Header = () => {
                     })}
                 </ul>
                 <div className="flex flex-1 justify-end">
-                    <ul className="flex gap-[2rem]">
+                    <ul className="flex gap-[1.5rem] md:gap-[2rem]">
                         <div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="focus:outline-none">
