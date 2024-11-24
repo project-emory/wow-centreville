@@ -56,7 +56,7 @@ const RootLayout = ({
                 <link rel="manifest" href="/favicon/site.v1.webmanifest" />
             </head>
             <body
-                className={`${antonio.variable} ' flex min-h-screen flex-col bg-[#F3EDE1] font-antonio text-black antialiased`}
+                className={`${antonio.variable} 'flex min-h-screen flex-col bg-[#F3EDE1] font-antonio text-black antialiased`}
             >
                 <Provider>
                     <Header />
