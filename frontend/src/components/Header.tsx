@@ -80,7 +80,7 @@ const Header = () => {
                             })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <div className="text-[5vw] font-bold md:text-[3.7vw] lg:text-3xl">
+                    <div className="text-[1.3rem] font-bold sm:text-[1.5rem] lg:text-3xl">
                         WOW-CENTREVILLE
                     </div>
                 </div>
@@ -102,7 +102,7 @@ const Header = () => {
                     })}
                 </ul>
                 <div className="flex flex-1 justify-end">
-                    <ul className="flex gap-[2rem]">
+                    <ul className="flex gap-[1.5rem] md:gap-[2rem]">
                         <div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger className="focus:outline-none">
