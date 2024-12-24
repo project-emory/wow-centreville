@@ -4,7 +4,7 @@
 # in the project, creating and installing dependencies if it doesn't and
 # activating the virtual environment if it does.
 # Requirements: python 3.11+
-# Usage: $ source ./activates.sh
+# Usage: $ source ./activate.sh
 
 if [ ! -d "./venv/" ]; then
     echo "Installing dependencies..."
