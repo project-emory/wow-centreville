@@ -4,9 +4,9 @@ from re import fullmatch, sub
 
 
 def phone_validator(number: str):
-    """Validates that a phone number is between 7 and 15 digits long."""
-    if not fullmatch(r"\d{7,15}", number):
-        raise ValidationError("Phone number must be between 7 and 15 digits.")
+    """Validates that a phone number is between 10 and 15 digits long."""
+    if not fullmatch(r"\d{10,15}", number):
+        raise ValidationError("Phone number must be between 10 and 15 digits.")
 
 
 class User(models.Model):
@@ -15,7 +15,7 @@ class User(models.Model):
     phone_number = models.CharField(
         max_length=15, primary_key=True, validators=[phone_validator]
     )
-    """Should be a string of digits between 7 and 15 digits (inclusive)."""
+    """Should be a string of digits between 10 and 15 digits (inclusive)."""
     verified = models.BooleanField(default=False)
     username = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,14 +41,14 @@ class Order(models.Model):
     """Model for user orders."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    menu_items = models.ManyToManyField(MenuItem, through="OrderItem")
+    items = models.ManyToManyField(MenuItem, through="OrderItem")
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def total_amount(self):
-        return sum(item.price for item in self.menu_items.all())
+        return sum(item.price for item in self.items.all())
 
     class Meta:
         ordering = ["-created_at"]
