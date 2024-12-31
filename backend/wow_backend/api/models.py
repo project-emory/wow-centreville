@@ -41,7 +41,9 @@ class Order(models.Model):
     """Model for user orders."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    items = models.ManyToManyField(MenuItem, through="OrderItem")
+    items = models.ManyToManyField(
+        MenuItem, through="OrderItem"
+    )  # TODO: check why menuitem instance is expected when doing items.add()
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -49,6 +51,25 @@ class Order(models.Model):
     @property
     def total_amount(self):
         return sum(item.price for item in self.items.all())
+
+    def clean(self):
+        """Remove any unavailable items from the order."""
+        super().clean()
+        # check if order exists in database so that many-to-many relationship exists
+        if self.pk:
+            unavailable_items = self.order_items.filter(menu_item__is_available=False)
+            if unavailable_items.exists():
+                unavailable_items.delete()
+
+    def save(self, *args, **kwargs):
+        """Override save to clean unavailable items."""
+        if not self.pk:
+            super().save(*args, **kwargs)
+            self.clean()
+            super().save(*args, **kwargs)
+        else:
+            self.clean()
+            super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["-created_at"]

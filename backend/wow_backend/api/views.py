@@ -47,7 +47,7 @@ class MenuItemViewSet(
     serializer_class = MenuItemSerializer
 
     def get_queryset(self):
-        """Default queryset -- returns all available items."""
+        """Default queryset -- can filter by availability."""
         items = MenuItem.objects.all()
         items = (
             [item for item in items if item.is_available]
