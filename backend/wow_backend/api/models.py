@@ -52,6 +52,8 @@ class Order(models.Model):
     def total_amount(self):
         return sum(item.price for item in self.items.all())
 
+    # TODO: change clean to on retrieval, since invalid order items will most likely occur on stale orders
+
     def clean(self):
         """Remove any unavailable items from the order."""
         super().clean()
@@ -60,6 +62,7 @@ class Order(models.Model):
             unavailable_items = self.order_items.filter(menu_item__is_available=False)
             if unavailable_items.exists():
                 unavailable_items.delete()
+            self.items.remove(*unavailable_items)
 
     def save(self, *args, **kwargs):
         """Override save to clean unavailable items."""
