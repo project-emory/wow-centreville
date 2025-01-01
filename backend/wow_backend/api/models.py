@@ -67,13 +67,12 @@ class Order(models.Model):
 
         return order_item
 
-    # TODO: change clean to on retrieval, since invalid order items will most likely occur on stale orders
-
     def clean(self):
-        """Remove any unavailable items from the order."""
+        """Remove any unavailable items from unfulfilled orders."""
         super().clean()
-        # check if order exists in database so that many-to-many relationship exists
-        if self.pk:
+
+        # order must exist for many-to-many relationship to work
+        if self.pk and not self.is_paid:
             unavailable_items = self.order_items.filter(menu_item__is_available=False)
             if unavailable_items.exists():
                 unavailable_items.delete()
@@ -83,11 +82,9 @@ class Order(models.Model):
         """Override save to clean unavailable items."""
         if not self.pk:
             super().save(*args, **kwargs)
-            self.clean()
-            super().save(*args, **kwargs)
-        else:
-            self.clean()
-            super().save(*args, **kwargs)
+
+        self.clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["-created_at"]

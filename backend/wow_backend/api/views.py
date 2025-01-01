@@ -34,6 +34,13 @@ class OrderViewSet(
 
     def get_queryset(self):
         orders = Order.objects.all()
+
+        # not very performant, but this is easiest for now -- ensure all fetched orders
+        # are cleaned, so that stale orders will display cost properly
+        # open to changing this in the future
+        for order in [o for o in orders if not o.is_paid]:
+            order.save()
+
         return orders
         # TODO: should link user with `User`` model and automatically fetch a user's orders
         # return orders.filter(user=self.request.user)
