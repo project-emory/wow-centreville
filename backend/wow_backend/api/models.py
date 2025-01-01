@@ -52,6 +52,21 @@ class Order(models.Model):
     def total_amount(self):
         return sum(item.price for item in self.items.all())
 
+    def add_item(self, menu_item: MenuItem, quantity: int = 1) -> "OrderItem":
+        """Add a menu item to the order with the specified quantity."""
+        if not menu_item.is_available:
+            raise ValueError(f"Menu item {menu_item} is not available!")
+
+        order_item, created = OrderItem.objects.get_or_create(
+            order=self, menu_item=menu_item, defaults={"quantity": quantity}
+        )
+
+        if not created:
+            order_item.quantity += quantity
+            order_item.save()
+
+        return order_item
+
     # TODO: change clean to on retrieval, since invalid order items will most likely occur on stale orders
 
     def clean(self):
@@ -83,7 +98,7 @@ class OrderItem(models.Model):
         Order, on_delete=models.CASCADE, related_name="order_items"
     )
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
