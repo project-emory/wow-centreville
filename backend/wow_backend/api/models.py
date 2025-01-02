@@ -4,9 +4,9 @@ from re import fullmatch, sub
 
 
 def phone_validator(number: str):
-    """Validates that a phone number is between 7 and 15 digits long."""
-    if not fullmatch(r"\d{7,15}", number):
-        raise ValidationError("Phone number must be between 7 and 15 digits.")
+    """Validates that a phone number is between 10 and 15 digits long."""
+    if not fullmatch(r"\d{10,15}", number):
+        raise ValidationError("Phone number must be between 10 and 15 digits.")
 
 
 class User(models.Model):
@@ -15,7 +15,7 @@ class User(models.Model):
     phone_number = models.CharField(
         max_length=15, primary_key=True, validators=[phone_validator]
     )
-    """Should be a string of digits between 7 and 15 digits (inclusive)."""
+    """Should be a string of digits between 10 and 15 digits (inclusive)."""
     verified = models.BooleanField(default=False)
     username = models.CharField(max_length=25)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,14 +41,50 @@ class Order(models.Model):
     """Model for user orders."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    menu_items = models.ManyToManyField(MenuItem, through="OrderItem")
+    items = models.ManyToManyField(
+        MenuItem, through="OrderItem"
+    )  # TODO: check why menuitem instance is expected when doing items.add()
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def total_amount(self):
-        return sum(item.price for item in self.menu_items.all())
+        return sum(item.price for item in self.items.all())
+
+    def add_item(self, menu_item: MenuItem, quantity: int = 1) -> "OrderItem":
+        """Add a menu item to the order with the specified quantity."""
+        if not menu_item.is_available:
+            raise ValueError(f"Menu item {menu_item} is not available!")
+
+        order_item, created = OrderItem.objects.get_or_create(
+            order=self, menu_item=menu_item, defaults={"quantity": quantity}
+        )
+
+        if not created:
+            order_item.quantity += quantity
+            order_item.save()
+
+        return order_item
+
+    def clean(self):
+        """Remove any unavailable items from unfulfilled orders."""
+        super().clean()
+
+        # order must exist for many-to-many relationship to work
+        if self.pk and not self.is_paid:
+            unavailable_items = self.order_items.filter(menu_item__is_available=False)
+            if unavailable_items.exists():
+                unavailable_items.delete()
+            self.items.remove(*unavailable_items)
+
+    def save(self, *args, **kwargs):
+        """Override save to clean unavailable items."""
+        if not self.pk:
+            super().save(*args, **kwargs)
+
+        self.clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["-created_at"]
@@ -59,7 +95,7 @@ class OrderItem(models.Model):
         Order, on_delete=models.CASCADE, related_name="order_items"
     )
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

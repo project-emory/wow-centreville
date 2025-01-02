@@ -3,6 +3,7 @@ URL configuration for wow_backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
+
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -16,9 +17,11 @@ Including another URLconf
 """
 
 from rest_framework.routers import DefaultRouter
-from api.views import UserViewSet
+from api.views import MenuItemViewSet, OrderViewSet, UserViewSet
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
+router.register(r"orders", OrderViewSet, basename="orders")
+router.register(r"menu-items", MenuItemViewSet, basename="menu-items")
 
 urlpatterns = router.urls

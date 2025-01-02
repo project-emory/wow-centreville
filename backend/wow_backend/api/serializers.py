@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import User, Order, OrderItem, MenuItem
+from django.db import transaction
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,18 +11,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    """Serializer for the Order model."""
-
-    total_amount = serializers.ReadOnlyField()
-
-    class Meta:
-        model = Order
-        fields = "__all__"
-
-
 class MenuItemSerializer(serializers.ModelSerializer):
-    """Serializer for the OrderItem model."""
+    """Serializer for the MenuItem model."""
 
     class Meta:
         model = MenuItem
@@ -29,7 +20,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    """Serializer for the MenuItem model."""
+    """Serializer for the OrderItem model."""
 
     class Meta:
         model = OrderItem
@@ -49,3 +40,35 @@ class OrderItemSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """Serializer for the Order model."""
+
+    order_items = OrderItemSerializer(many=True, required=False)
+    total_amount = serializers.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+    def create(self, validated_data: dict):
+        """Custom create method to handle order_items."""
+        # fetch order items
+        order_items_data = validated_data.pop("order_items", [])
+
+        # create instances
+        with transaction.atomic():
+            order = Order.objects.create(**validated_data)
+
+            for item_data in order_items_data:
+                OrderItem(
+                    order=order,
+                    **item_data,
+                )
+
+        return order
