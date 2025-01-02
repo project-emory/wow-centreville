@@ -80,9 +80,8 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         """Override save to clean unavailable items."""
-        if not self.pk:
-            super().save(*args, **kwargs)
-
+        # currently does not check if the primary key exists - may run into errors when creating models?
+        # problem for later ig
         self.clean()
         super().save(*args, **kwargs)
 
