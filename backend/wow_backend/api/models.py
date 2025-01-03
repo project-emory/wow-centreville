@@ -44,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(
         max_length=15, primary_key=True, validators=[phone_validator]
     )
-    username = models.CharField(max_length=25)
+    username = models.CharField(max_length=25, unique=True)
     verified = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
