@@ -1,6 +1,35 @@
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 from re import fullmatch, sub
+
+
+class UserManager(BaseUserManager):
+    """Authentication manager for the custom `User` model."""
+
+    def create_user(
+        self, phone_number: str, username: str, password=None, **extra_fields
+    ) -> "User":
+        if not phone_number:
+            raise ValueError("The phone_number field must be set!")
+        user: "User" = self.model(
+            phone_number=phone_number, username=username, **extra_fields
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(
+        self, phone_number: str, username: str, password=None, **extra_fields
+    ) -> "User":
+        user = self.create_user(phone_number, username, password, **extra_fields)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
 
 
 def phone_validator(number: str):
@@ -9,17 +38,28 @@ def phone_validator(number: str):
         raise ValidationError("Phone number must be between 10 and 15 digits.")
 
 
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     """Model for site users."""
 
     phone_number = models.CharField(
         max_length=15, primary_key=True, validators=[phone_validator]
     )
-    """Should be a string of digits between 10 and 15 digits (inclusive)."""
+    username = models.CharField(max_length=25, unique=True)
     verified = models.BooleanField(default=False)
-    username = models.CharField(max_length=25)
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "phone_number"
+    REQUIRED_FIELDS = ["username"]
+
+    def __str__(self):
+        return self.phone_number
 
     def save(self, *args, **kwargs):
         """Overridden save function that standardizes phone numbers before validation."""
@@ -41,9 +81,7 @@ class Order(models.Model):
     """Model for user orders."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    items = models.ManyToManyField(
-        MenuItem, through="OrderItem"
-    )  # TODO: check why menuitem instance is expected when doing items.add()
+    items = models.ManyToManyField(MenuItem, through="OrderItem")
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -80,9 +118,8 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         """Override save to clean unavailable items."""
-        if not self.pk:
-            super().save(*args, **kwargs)
-
+        # currently does not check if the primary key exists - may run into errors when creating models?
+        # problem for later ig
         self.clean()
         super().save(*args, **kwargs)
 

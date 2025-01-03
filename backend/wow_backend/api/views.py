@@ -1,28 +1,74 @@
-from rest_framework.mixins import (
-    CreateModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework import status
+from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+
+from django.contrib.auth import authenticate
 
 from .models import MenuItem, Order, User
-from .serializers import MenuItemSerializer, OrderSerializer, UserSerializer
+from .serializers import (
+    MenuItemSerializer,
+    OrderSerializer,
+    UserCreateSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(
-    GenericViewSet,  # generic view functionality
-    CreateModelMixin,  # handles POST
-    RetrieveModelMixin,  # handles GETs for 1
-    UpdateModelMixin,  # handles PUTs and PATCHes
-    ListModelMixin,  # handles GETs for many
+    ModelViewSet,
 ):
     """View set for the `User` model."""
 
-    # TODO: add authorization
+    def get_serializer_class(self):
+        """Return a different serializer depending on operation."""
+        if self.action == "create":
+            return UserCreateSerializer
+        return UserSerializer
 
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    def get_queryset(self):
+        users = User.objects.all()
+        return users
+        # TODO: should only return logged in user - other users should be unviewable by anyone except admin + self
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
+class LoginViewSet(ViewSet):
+    """View for authenticating users and returning tokens."""
+
+    def create(self, request: Request):
+        phone_number = request.data.get("phone_number")
+        # username = request.data.get("username")
+        password = request.data.get("password")
+
+        # TODO: continue: allow logging in with username
+        # if not (phone_number or username) or not password:
+        if not phone_number or not password:
+            return Response(
+                {"error": "Please provide a phone number and password"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = authenticate(phone_number=phone_number, password=password)
+
+        if user:
+            # TODO: add token expiry and rate limiting
+            token, _ = Token.objects.get_or_create(user=user)
+
+            return Response({"token": token.key, "user": UserSerializer(user).data})
+        else:
+            return Response(
+                {"error": "Invalid credentials"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
 class OrderViewSet(
@@ -44,6 +90,16 @@ class OrderViewSet(
         return orders
         # TODO: should link user with `User`` model and automatically fetch a user's orders
         # return orders.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        # needs to take self.request.user in account
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
 
 class MenuItemViewSet(
