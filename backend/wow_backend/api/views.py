@@ -1,28 +1,40 @@
-from rest_framework.mixins import (
-    CreateModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from .models import MenuItem, Order, User
-from .serializers import MenuItemSerializer, OrderSerializer, UserSerializer
+from .serializers import (
+    MenuItemSerializer,
+    OrderSerializer,
+    UserCreateSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(
-    GenericViewSet,  # generic view functionality
-    CreateModelMixin,  # handles POST
-    RetrieveModelMixin,  # handles GETs for 1
-    UpdateModelMixin,  # handles PUTs and PATCHes
-    ListModelMixin,  # handles GETs for many
+    ModelViewSet,
 ):
     """View set for the `User` model."""
 
     # TODO: add authorization
 
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    def get_serializer_class(self):
+        """Return a different serializer depending on operation."""
+        if self.action == "create":
+            return UserCreateSerializer
+        return UserSerializer
+
+    def get_queryset(self):
+        users = User.objects.all()
+        return users
+        # TODO: should only return logged in user - other users should be unviewable by anyone except admin + self
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
 
 class OrderViewSet(
