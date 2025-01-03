@@ -15,12 +15,12 @@ class UserManager(BaseUserManager):
         self, phone_number: str, username: str, password=None, **extra_fields
     ) -> "User":
         if not phone_number:
-            raise ValueError(f"The phone_number field must be set!")
+            raise ValueError("The phone_number field must be set!")
         user: "User" = self.model(
             phone_number=phone_number, username=username, **extra_fields
         )
         user.set_password(password)
-        user.save(sing=self._db)
+        user.save(using=self._db)
         return user
 
     def create_superuser(
@@ -28,7 +28,7 @@ class UserManager(BaseUserManager):
     ) -> "User":
         user = self.create_user(phone_number, username, password, **extra_fields)
         user.is_admin = True
-        user.save(sing=self._db)
+        user.save(using=self._db)
         return user
 
 
