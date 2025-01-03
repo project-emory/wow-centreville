@@ -58,6 +58,7 @@ class OrderViewSet(
         # return orders.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        # needs to take self.request.user in account
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):

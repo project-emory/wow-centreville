@@ -1,6 +1,10 @@
 from rest_framework import serializers
-from api.models import User, Order, OrderItem, MenuItem
+from rest_framework.authtoken.models import Token
+
+from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
+
+from api.models import User, Order, OrderItem, MenuItem
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,6 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     """Serializer for creation of the `User` model."""
 
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+
     class Meta:
         model = User
         fields = ("phone_number", "username", "password")
@@ -26,6 +34,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
         )
         return user
+
+    def to_representation(self, instance: User):
+        token, _ = Token.objects.get_or_create(user=instance)
+        user_data = UserSerializer(instance).data
+        return {"token": token.key, "user": user_data}
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -72,6 +85,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "__all__"
+        read_only_fields = ["user"]
 
     def create(self, validated_data: dict):
         """Custom create method to handle `order_items`."""
