@@ -10,7 +10,7 @@ from rest_framework import status
 
 class updateMenuItemView(APIView): 
     def putMenuItem(self, request, *args, **kwargs): 
-        menu_id = request.query_parems.get("id", None) # default id to none 
+        menu_id = request.query_parems.get("pk", None) # default id to none 
         
         # if menu_id is None:
             # add logics
