@@ -18,6 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from api.views import createMenuItemView, MenuItemView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-]
+    path("menu-item/create/", createMenuItemView.as_view(), name="create-menu-item"),
+    path("menu-item/<int:pk>", MenuItemView.as_view(), name="update-menu-item")
+] 
