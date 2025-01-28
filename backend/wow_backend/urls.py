@@ -24,4 +24,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("menu-item/create/", createMenuItemView.as_view(), name="create-menu-item"),
     path("menu-item/<int:pk>", MenuItemView.as_view(), name="update-menu-item")
+    # checking 
 ] 
