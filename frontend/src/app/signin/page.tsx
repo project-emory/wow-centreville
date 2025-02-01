@@ -62,7 +62,10 @@ const SignUp = () => {
                     Create Account
                 </button>
                 <div className="-mb-7 text-[1.15rem] text-[#C61C00]">Already have an account?</div>
-                <button className="transition-bg h-12 w-80 rounded-[5px] bg-[#D9D9D9] text-[1.5rem] text-wow-red duration-300 hover:bg-[#C4C4C4]" onClick={handleSignInClick}>
+                <button
+                    className="transition-bg h-12 w-80 rounded-[5px] bg-[#D9D9D9] text-[1.5rem] text-wow-red duration-300 hover:bg-[#C4C4C4]"
+                    onClick={handleSignInClick}
+                >
                     Sign In
                 </button>
             </div>
