@@ -8,17 +8,20 @@ const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 const DropdownMenuContent = React.forwardRef<
     React.ElementRef<typeof DropdownMenuPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+>(({ children, className, sideOffset = 4, ...props }, ref) => (
     <DropdownMenuPrimitive.Portal>
         <DropdownMenuPrimitive.Content
             ref={ref}
-            sideOffset={sideOffset}
+            sideOffset={sideOffset} // how far from the trigger; set to 4
             className={cn(
                 "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md",
                 className,
             )}
             {...props}
-        />
+        >
+            {children}
+            <DropdownMenuPrimitive.Arrow className="fill-white"/>
+        </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
@@ -31,8 +34,8 @@ const DropdownMenuItem = React.forwardRef<
     <DropdownMenuPrimitive.Item
         ref={ref}
         className={cn(
-            "focus:bg-accent focus:text-accent-foreground relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-            inset && "pl-8",
+            "focus:text-accent-foreground relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
+            inset && "pl-8", // if inset is true, add padding-left of 8px
             className,
         )}
         {...props}
