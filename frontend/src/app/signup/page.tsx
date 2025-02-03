@@ -34,26 +34,26 @@ const SignUp = () => {
                 <div className="text-[3.5rem] font-semibold text-wow-red">Sign Up</div>
                 <input
                     type="text"
-                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-[#C61C00] placeholder:opacity-35"
+                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                     placeholder="Phone Number"
                     required
                 />
                 <input
                     type="text"
-                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-[#C61C00] placeholder:opacity-35"
+                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                     placeholder="First Name"
                     required
                 />
                 <input
                     type="text"
-                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-[#C61C00] placeholder:opacity-35"
+                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                     placeholder="Last Name"
                     required
                 />
                 <div className="relative w-80">
                     <input
                         type={isPasswordVisible ? "text" : "password"} // Toggle password visibility
-                        className="placeholder-text-xl h-10 w-full bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-[#C61C00] placeholder:opacity-35"
+                        className="placeholder-text-xl h-10 w-full bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                         placeholder="Password"
                         required
                     />
@@ -75,7 +75,7 @@ const SignUp = () => {
                 <div className="relative w-80">
                     <input
                         type={isConfirmPasswordVisible ? "text" : "password"} // Toggle confirm password visibility
-                        className="placeholder-text-xl h-10 w-full bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-[#C61C00] placeholder:opacity-35"
+                        className="placeholder-text-xl h-10 w-full bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                         placeholder="Confirm Password"
                         required
                     />
