@@ -20,7 +20,7 @@ const DropdownMenuContent = React.forwardRef<
             {...props}
         >
             {children}
-            <DropdownMenuPrimitive.Arrow className="fill-white"/>
+            <DropdownMenuPrimitive.Arrow className="fill-white" />
         </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
 ));
@@ -34,7 +34,7 @@ const DropdownMenuItem = React.forwardRef<
     <DropdownMenuPrimitive.Item
         ref={ref}
         className={cn(
-            "focus:text-accent-foreground relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors",
+            "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:text-accent-foreground",
             inset && "pl-8", // if inset is true, add padding-left of 8px
             className,
         )}

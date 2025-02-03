@@ -14,7 +14,7 @@ const config: Config = {
                 "wow-red": "#C61C00",
                 "wow-cream": "#F3EDE1",
                 "wow-black": "#191918",
-                "accent-foreground": "#C61C00", 
+                "accent-foreground": "#C61C00",
                 "accent-background": "#F3EDE1",
             },
             fontFamily: {
