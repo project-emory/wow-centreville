@@ -51,14 +51,6 @@ const SignUp = () => {
                 <div className="text-[3.5rem] font-semibold text-wow-red">Sign Up</div>
                 <input
                     type="text"
-                    value={phoneNumber}
-                    onChange={handlePhoneChange}
-                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
-                    placeholder="Phone Number"
-                    required
-                />
-                <input
-                    type="text"
                     className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                     placeholder="First Name"
                     required
@@ -67,6 +59,14 @@ const SignUp = () => {
                     type="text"
                     className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
                     placeholder="Last Name"
+                    required
+                />
+                <input
+                    type="text"
+                    value={phoneNumber}
+                    onChange={handlePhoneChange}
+                    className="h-10 w-80 bg-[#D9D9D9] px-2 text-xl text-[#C61C00] placeholder:text-xl placeholder:text-wow-red placeholder:opacity-100 focus:outline-none focus:placeholder:text-[#C61C00] focus:placeholder:opacity-60"
+                    placeholder="Phone Number"
                     required
                 />
                 <div className="relative w-80">
