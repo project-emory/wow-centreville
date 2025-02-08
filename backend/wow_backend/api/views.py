@@ -3,8 +3,6 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action
-
 
 from django.contrib.auth import authenticate
 
@@ -16,12 +14,14 @@ from .serializers import (
     UserSerializer,
 )
 
+
 class UserViewSet(
     ModelViewSet,
 ):
-    
     """View set for the `User` model."""
-    lookup_field = 'id'
+
+    lookup_field = "id"
+
     def get_serializer_class(self):
         """Return a different serializer depending on operation."""
         if self.action == "create":
@@ -35,30 +35,36 @@ class UserViewSet(
 
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
-    
+
     def update(self, request, *args, **kwargs):
         typeofrequest = request.method == "PATCH"
 
         instance = self.get_object()
         updated_fields = list(request.data.keys())
-        restricted_fields = ['verified', 'is_active', 'is_admin', 'created_at']
+        restricted_fields = ["verified", "is_active", "is_admin", "created_at"]
         if any(field in updated_fields for field in restricted_fields):
-            return Response({"Error:" "You cannot change these fields"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = self.get_serializer(instance, data=request.data, partial=typeofrequest)
+            return Response(
+                {"Error:You cannot change these fields"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=typeofrequest
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.is_admin:
             Request({"Error": "Cant delete admin!"}, status=status.HTTP_400_BAD_REQUEST)
         self.perform_destroy(instance)
-        return Response({"message": "User deleted successfully."}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "User deleted successfully."}, status=status.HTTP_200_OK
+        )
 
 
 class LoginViewSet(ViewSet):
