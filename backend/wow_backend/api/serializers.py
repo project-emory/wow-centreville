@@ -12,7 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("phone_number", "username", "verified", "created_at", "updated_at")
+        fields = (
+            "id",
+            "phone_number",
+            "username",
+            "verified",
+            "created_at",
+            "updated_at",
+        )
         read_only_fields = ("verified", "created_at", "updated_at")
 
 

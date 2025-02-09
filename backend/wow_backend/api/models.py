@@ -41,8 +41,9 @@ def phone_validator(number: str):
 class User(AbstractBaseUser, PermissionsMixin):
     """Model for site users."""
 
+    id = models.AutoField(primary_key=True)
     phone_number = models.CharField(
-        max_length=15, primary_key=True, validators=[phone_validator]
+        max_length=15, unique=True, validators=[phone_validator]
     )
     username = models.CharField(max_length=25, unique=True)
     verified = models.BooleanField(default=False)
