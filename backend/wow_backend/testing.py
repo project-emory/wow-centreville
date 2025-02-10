@@ -11,11 +11,22 @@ os.environ.setdefault(
 # Initialize Django
 django.setup()
 
-def main_create_superuser(): 
+def create_superuser(): 
     from api.models import User 
 
     user = User.objects.create_superuser(phone_number="4042850425", username="Andrew Lin", password="123")
     print(user.username)
+    print(user.is_superuser)
+
+def main_get_user():
+    from api.models import User
+    
+    user = User.objects.get(id = '1')
+    print(user.username)
+    print(user.is_superuser)
+    print(user.is_staff)
+    print(user.is_admin)
+
     
 # def main():
 #     # Now import your serializers and models
@@ -38,4 +49,4 @@ def main_create_superuser():
 
 
 if __name__ == "__main__":
-    main_create_superuser()
+    main_get_user()
