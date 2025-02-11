@@ -21,6 +21,8 @@ class UserViewSet(
 ):
     """View set for the `User` model."""
 
+    lookup_field = "id"
+
     def get_serializer_class(self):
         """Return a different serializer depending on operation."""
         if self.action == "create":
@@ -36,10 +38,34 @@ class UserViewSet(
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        typeofrequest = request.method == "PATCH"
+
+        instance = self.get_object()
+        updated_fields = list(request.data.keys())
+        restricted_fields = ["verified", "is_active", "is_admin", "created_at"]
+        if any(field in updated_fields for field in restricted_fields):
+            return Response(
+                {"Error:You cannot change these fields"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=typeofrequest
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        instance = self.get_object()
+        if instance.is_admin:
+            Request({"Error": "Cant delete admin!"}, status=status.HTTP_400_BAD_REQUEST)
+        self.perform_destroy(instance)
+        return Response(
+            {"message": "User deleted successfully."}, status=status.HTTP_200_OK
+        )
 
 
 class LoginViewSet(ViewSet):

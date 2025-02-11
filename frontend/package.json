@@ -14,7 +14,7 @@
         "clsx": "^2.1.1",
         "i18next": "^23.16.6",
         "lucide-react": "^0.460.0",
-        "next": "^15.0.0",
+        "next": "^15.1.2",
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.8",
         "react": "^18.3.1",
