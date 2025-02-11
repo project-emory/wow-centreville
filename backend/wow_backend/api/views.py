@@ -14,6 +14,7 @@ from .serializers import (
     UserSerializer,
 )
 
+from rest_framework.permissions import IsAdminUser, AllowAny
 
 class UserViewSet(
     ModelViewSet,
@@ -45,19 +46,20 @@ class LoginViewSet(ViewSet):
     """View for authenticating users and returning tokens."""
 
     def create(self, request: Request):
-        phone_number = request.data.get("phone_number")
+        id = request.data.get("id")
+        # phone_number = request.data.get("phone_number")
         # username = request.data.get("username")
         password = request.data.get("password")
 
         # TODO: continue: allow logging in with username
         # if not (phone_number or username) or not password:
-        if not phone_number or not password:
+        if not id or not password:
             return Response(
                 {"error": "Please provide a phone number and password"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user = authenticate(phone_number=phone_number, password=password)
+        user = authenticate(id=id, password=password)
 
         if user:
             # TODO: add token expiry and rate limiting
@@ -118,3 +120,33 @@ class MenuItemViewSet(
             else items
         )
         return items
+    
+    def create(self, request, *args, **kwargs):
+        if not request.user.is_staff: # double check user status
+            return Response(
+                {"Error": "Only admins have access to create menu items."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        if not request.user.is_staff: # double check user status
+            return Response(
+                {"Error": "Only admins have access to update menu items."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_staff: # double check user status
+            return Response(
+                {"Error": "Only admins have access to delete menu items."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().destroy(request, *args, **kwargs)
+
+    # src: https://www.django-rest-framework.org/api-guide/viewsets/#introspecting-viewset-actions
+    def get_permissions(self): 
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]  
+        return [IsAdminUser()]  

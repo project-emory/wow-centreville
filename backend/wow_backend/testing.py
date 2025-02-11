@@ -14,13 +14,13 @@ django.setup()
 def create_superuser(): 
     from api.models import User 
 
-    user = User.objects.create_superuser(phone_number="4042850425", username="Andrew Lin", password="123")
+    user = User.objects.create_superuser(phone_number="1231231231", username="Test_Superuser", password="123")
     print(user.username)
     print(user.is_superuser)
 
-def main_get_user():
+def get_user():
     from api.models import User
-    
+
     user = User.objects.get(id = '1')
     print(user.username)
     print(user.is_superuser)
@@ -49,4 +49,4 @@ def main_get_user():
 
 
 if __name__ == "__main__":
-    main_get_user()
+    create_superuser()

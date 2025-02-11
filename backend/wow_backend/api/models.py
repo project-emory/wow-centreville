@@ -19,6 +19,7 @@ class UserManager(BaseUserManager):
         user: "User" = self.model(
             phone_number=phone_number, username=username, **extra_fields
         )
+        #user.is_staff = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -28,6 +29,7 @@ class UserManager(BaseUserManager):
     ) -> "User":
         user = self.create_user(phone_number, username, password, **extra_fields)
         user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -38,17 +40,20 @@ def phone_validator(number: str):
         raise ValidationError("Phone number must be between 10 and 15 digits.")
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin): #AbstractBaseUser inherits from models.Model
     """Model for site users."""
 
+    id = models.AutoField(primary_key=True) 
     phone_number = models.CharField(
-        max_length=15, primary_key=True, validators=[phone_validator]
+        max_length=15, unique=True, validators=[phone_validator]
     )
+
     username = models.CharField(max_length=25, unique=True)
     verified = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True) # TODO: Only pre-defined in AbstractUser, , should be removed once after deployment
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -65,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Overridden save function that standardizes phone numbers before validation."""
         self.phone_number = sub(r"[ ()+\\-]", "", self.phone_number)
         self.clean_fields()
-        super(User, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class MenuItem(models.Model):
@@ -106,15 +111,24 @@ class Order(models.Model):
         return order_item
 
     def clean(self):
-        """Remove any unavailable items from unfulfilled orders."""
-        super().clean()
 
-        # order must exist for many-to-many relationship to work
+        super().clean()
+        
         if self.pk and not self.is_paid:
-            unavailable_items = self.order_items.filter(menu_item__is_available=False)
-            if unavailable_items.exists():
-                unavailable_items.delete()
-            self.items.remove(*unavailable_items)
+            # Delete all OrderItems with unavailable menu items.
+            self.order_items.filter(menu_item__is_available=False).delete()
+
+
+    # def clean(self):
+    #     """Remove any unavailable items from unfulfilled orders."""
+    #     super().clean()
+
+    #     # order must exist for many-to-many relationship to work
+    #     if self.pk and not self.is_paid:
+    #         unavailable_items = self.order_items.filter(menu_item__is_available=False)
+    #         if unavailable_items.exists():
+    #             unavailable_items.delete()
+    #         self.items.remove(*unavailable_items)
 
     def save(self, *args, **kwargs):
         """Override save to clean unavailable items."""

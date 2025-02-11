@@ -18,6 +18,8 @@ Including another URLconf
 
 from rest_framework.routers import DefaultRouter
 from api.views import LoginViewSet, MenuItemViewSet, OrderViewSet, UserViewSet
+from django.urls import path
+from django.contrib import admin
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="users")
@@ -25,4 +27,6 @@ router.register(r"orders", OrderViewSet, basename="orders")
 router.register(r"menu-items", MenuItemViewSet, basename="menu-items")
 router.register("login", LoginViewSet, basename="login")
 
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+    path("admin/", admin.site.urls)
+]
