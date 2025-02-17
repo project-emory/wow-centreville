@@ -79,12 +79,12 @@ const SignUp = () => {
                     {isIconVisible && (
                         <div
                             className={`absolute right-2 top-1/2 -translate-y-1/2 transform cursor-pointer ${
-                                !isPasswordVisible ? "translate-x-[5%]" : ""
+                                !isPasswordVisible ? "translate-x-[-1.55%]" : ""
                             }`} // Apply translation only when password is hidden
                             onClick={togglePasswordVisibility} // Toggle the password visibility
                         >
                             <Image
-                                src={isPasswordVisible ? eye : eyeSlash} // Toggle between the icons
+                                src={isPasswordVisible ? eyeSlash : eye} // Toggle between the icons
                                 alt="eye-icon"
                             />
                         </div>
@@ -101,12 +101,12 @@ const SignUp = () => {
                     {isIconVisible && (
                         <div
                             className={`absolute right-2 top-1/2 -translate-y-1/2 transform cursor-pointer ${
-                                !isConfirmPasswordVisible ? "translate-x-[5%]" : ""
+                                !isConfirmPasswordVisible ? "translate-x-[-1.55%]" : ""
                             }`} // Apply translation only when confirm password is hidden
                             onClick={toggleConfirmPasswordVisibility} // Toggle the confirm password visibility
                         >
                             <Image
-                                src={isConfirmPasswordVisible ? eye : eyeSlash} // Toggle between the icons
+                                src={isConfirmPasswordVisible ? eyeSlash : eye} // Toggle between the icons
                                 alt="eye-icon"
                             />
                         </div>
