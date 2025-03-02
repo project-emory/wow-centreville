@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-
+from django.db import transaction
 from django.contrib.auth import authenticate
 
 from .models import MenuItem, Order, User
@@ -118,15 +118,64 @@ class OrderViewSet(
         # return orders.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        # needs to take self.request.user in account
-        return super().create(request, *args, **kwargs)
+        order_items = request.data.get("order_items")
+        for item in order_items:
+            menu_item_id = item.get("menu_item")
+
+        if not menu_item_id:
+            return Response({"error": "Menu item is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            menu_item = MenuItem.objects.get(id=menu_item_id)
+        except MenuItem.DoesNotExist:
+            return Response({"error": "Menu item does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_id = request.data.get("user")  # ✅ Extract user from request JSON
+        if not user_id:
+            return Response({"error": "User is required"}, status=status.HTTP_400_BAD_REQUEST)
+        print(f"Received user_id: {user_id}")  # Debug user_id before querying
+
+        try:
+            user = User.objects.get(id=user_id)  # ✅ Ensure the user exists
+        except User.DoesNotExist:
+            return Response({"error": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ✅ Create the order within a transaction
+        with transaction.atomic():
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=user)  # ✅ Save order with user
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        typeofrequest = request.method == "PATCH"
+
+        instance = self.get_object()
+        updated_fields = list(request.data.keys())
+        restricted_fields = ["user", "created_at"]
+        if any(field in updated_fields for field in restricted_fields):
+            return Response(
+                {"Error:You cannot change these fields"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=typeofrequest
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {"message": "Order deleted successfully."}, status=status.HTTP_200_OK
+        )
 
 class MenuItemViewSet(
     ModelViewSet,

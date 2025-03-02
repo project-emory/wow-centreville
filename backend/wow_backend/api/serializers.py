@@ -62,6 +62,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = "__all__"
+        extra_kwargs = {
+            "order": {"read_only": True}  # ✅ Prevents "order is required" error
+        }
 
     def validate_quantity(self, value):
         if value < 1:
@@ -81,7 +84,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer for the `Order` model."""
-
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     order_items = OrderItemSerializer(many=True, required=False)
     total_amount = serializers.DecimalField(
         max_digits=7,
@@ -95,18 +98,54 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ["user"]
 
     def create(self, validated_data: dict):
-        """Custom create method to handle `order_items`."""
-        # fetch order items
         order_items_data = validated_data.pop("order_items", [])
-
-        # create instances
+        user_field = validated_data.pop("user", None)
+        
+        # Ensure we get the User instance
+        try:
+            user = User.objects.get(id=user_field.id) if hasattr(user_field, "id") else User.objects.get(id=user_field)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user": "User does not exist."})
+        
+        if not order_items_data:
+            raise serializers.ValidationError({"order_items": "At least one menu item is required."})
+        
         with transaction.atomic():
-            order = Order.objects.create(**validated_data)
-
+            # Create the Order first
+            order = Order.objects.create(user=user, **validated_data)
+            print("Created order with id:", order.id)
+            
+            # For each order item, explicitly pass the IDs
             for item_data in order_items_data:
-                OrderItem(
-                    order=order,
-                    **item_data,
+                menu_item_instance = item_data['menu_item']
+                quantity = item_data.get('quantity')
+                print("Creating OrderItem with menu_item id:", menu_item_instance.id, "and quantity:", quantity)
+                OrderItem.objects.create(
+                    order_id=order.id,  # explicitly pass order id
+                    menu_item_id=menu_item_instance.id,  # explicitly pass menu_item id
+                    quantity=quantity
                 )
-
+        
         return order
+
+    def update(self, instance, validated_data):
+        # Pop nested data from validated_data
+        order_items_data = validated_data.pop("order_items", None)
+        
+        # Update the order instance's top-level fields
+        instance.is_paid = validated_data.get("is_paid", instance.is_paid)
+        # Update other fields as needed...
+        instance.save()
+
+        # If nested order_items data is provided, update them.
+        if order_items_data is not None:
+            # Option A: Replace all order items with the new list
+            # (If you need to update partially, you'll need more logic to update vs. create vs. delete)
+            instance.order_items.all().delete()  # Remove existing nested items
+            for item_data in order_items_data:
+                # Create new order items linked to the order
+                OrderItem.objects.create(order=instance, **item_data)
+
+        return instance
+
+    

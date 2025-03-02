@@ -81,7 +81,7 @@ class MenuItem(models.Model):
 class Order(models.Model):
     """Model for user orders."""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders", to_field="id")
     items = models.ManyToManyField(MenuItem, through="OrderItem")
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
