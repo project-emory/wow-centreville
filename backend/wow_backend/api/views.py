@@ -118,36 +118,29 @@ class OrderViewSet(
         # return orders.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        order_items = request.data.get("order_items")
-        for item in order_items:
-            menu_item_id = item.get("menu_item")
+        """Create an order with the provided data."""
+        # If user is authenticated, use their ID
+        # TODO: replace with only auth user id once auth implemented
+        if request.user.is_authenticated:
+            request.data['user'] = request.user.id
 
-        if not menu_item_id:
-            return Response({"error": "Menu item is required"}, status=status.HTTP_400_BAD_REQUEST)
+        # Validate and create the order
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Call the create method on the serializer
+        self.perform_create(serializer)
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, 
+            status=status.HTTP_201_CREATED, 
+            headers=headers
+        )
 
-        try:
-            menu_item = MenuItem.objects.get(id=menu_item_id)
-        except MenuItem.DoesNotExist:
-            return Response({"error": "Menu item does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-
-        user_id = request.data.get("user")  # ✅ Extract user from request JSON
-        if not user_id:
-            return Response({"error": "User is required"}, status=status.HTTP_400_BAD_REQUEST)
-        print(f"Received user_id: {user_id}")  # Debug user_id before querying
-
-        try:
-            user = User.objects.get(id=user_id)  # ✅ Ensure the user exists
-        except User.DoesNotExist:
-            return Response({"error": "User does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # ✅ Create the order within a transaction
-        with transaction.atomic():
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user=user)  # ✅ Save order with user
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    def perform_create(self, serializer):
+        """Perform the creation of the order."""
+        serializer.save()
 
     def update(self, request, *args, **kwargs):
         typeofrequest = request.method == "PATCH"

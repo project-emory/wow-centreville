@@ -63,7 +63,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = "__all__"
         extra_kwargs = {
-            "order": {"read_only": True}  # ✅ Prevents "order is required" error
+            "order": {"read_only": True}  # specifies order doesn't have to be passed in, allows for object creation
         }
 
     def validate_quantity(self, value):
@@ -121,7 +121,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 quantity = item_data.get('quantity')
                 print("Creating OrderItem with menu_item id:", menu_item_instance.id, "and quantity:", quantity)
                 OrderItem.objects.create(
-                    order_id=order.id,  # explicitly pass order id
+                    order=order,
                     menu_item_id=menu_item_instance.id,  # explicitly pass menu_item id
                     quantity=quantity
                 )
