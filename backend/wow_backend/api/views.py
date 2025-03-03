@@ -3,7 +3,6 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from django.db import transaction
 from django.contrib.auth import authenticate
 
 from .models import MenuItem, Order, User
@@ -122,20 +121,18 @@ class OrderViewSet(
         # If user is authenticated, use their ID
         # TODO: replace with only auth user id once auth implemented
         if request.user.is_authenticated:
-            request.data['user'] = request.user.id
+            request.data["user"] = request.user.id
 
         # Validate and create the order
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         # Call the create method on the serializer
         self.perform_create(serializer)
-        
+
         headers = self.get_success_headers(serializer.data)
         return Response(
-            serializer.data, 
-            status=status.HTTP_201_CREATED, 
-            headers=headers
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
     def perform_create(self, serializer):
@@ -144,31 +141,39 @@ class OrderViewSet(
 
     def update(self, request, *args, **kwargs):
         typeofrequest = request.method == "PATCH"
-
         instance = self.get_object()
-        updated_fields = list(request.data.keys())
-        restricted_fields = ["user", "created_at"]
-        if any(field in updated_fields for field in restricted_fields):
+
+        # Check if the order can be updated
+        if instance.is_paid and not request.user.is_admin:
             return Response(
-                {"Error:You cannot change these fields"},
+                {"detail": "Cannot update a paid order."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         serializer = self.get_serializer(
             instance, data=request.data, partial=typeofrequest
         )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
+        """Delete an order instance."""
         instance = self.get_object()
+
+        # Check if the order can be deleted
+        if instance.is_paid and not request.user.is_admin:
+            return Response(
+                {"detail": "Cannot delete a paid order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         self.perform_destroy(instance)
         return Response(
             {"message": "Order deleted successfully."}, status=status.HTTP_200_OK
         )
+
 
 class MenuItemViewSet(
     ModelViewSet,

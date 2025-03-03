@@ -63,7 +63,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = "__all__"
         extra_kwargs = {
-            "order": {"read_only": True}  # specifies order doesn't have to be passed in, allows for object creation
+            "order": {
+                "read_only": True
+            }  # specifies order doesn't have to be passed in, allows for object creation
         }
 
     def validate_quantity(self, value):
@@ -84,6 +86,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer for the `Order` model."""
+
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     order_items = OrderItemSerializer(many=True, required=False)
     total_amount = serializers.DecimalField(
@@ -100,38 +103,43 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         order_items_data = validated_data.pop("order_items", [])
         user_field = validated_data.pop("user", None)
-        
+
         # Ensure we get the User instance
         try:
-            user = User.objects.get(id=user_field.id) if hasattr(user_field, "id") else User.objects.get(id=user_field)
+            user = (
+                User.objects.get(id=user_field.id)
+                if hasattr(user_field, "id")
+                else User.objects.get(id=user_field)
+            )
         except User.DoesNotExist:
             raise serializers.ValidationError({"user": "User does not exist."})
-        
+
         if not order_items_data:
-            raise serializers.ValidationError({"order_items": "At least one menu item is required."})
-        
+            raise serializers.ValidationError(
+                {"order_items": "At least one menu item is required."}
+            )
+
         with transaction.atomic():
             # Create the Order first
             order = Order.objects.create(user=user, **validated_data)
-            print("Created order with id:", order.id)
-            
+            print(OrderSerializer(order).data)
+
             # For each order item, explicitly pass the IDs
             for item_data in order_items_data:
-                menu_item_instance = item_data['menu_item']
-                quantity = item_data.get('quantity')
-                print("Creating OrderItem with menu_item id:", menu_item_instance.id, "and quantity:", quantity)
+                menu_item_instance = item_data["menu_item"]
+                quantity = item_data.get("quantity")
                 OrderItem.objects.create(
                     order=order,
                     menu_item_id=menu_item_instance.id,  # explicitly pass menu_item id
-                    quantity=quantity
+                    quantity=quantity,
                 )
-        
+
         return order
 
     def update(self, instance, validated_data):
         # Pop nested data from validated_data
         order_items_data = validated_data.pop("order_items", None)
-        
+
         # Update the order instance's top-level fields
         instance.is_paid = validated_data.get("is_paid", instance.is_paid)
         # Update other fields as needed...
@@ -147,5 +155,3 @@ class OrderSerializer(serializers.ModelSerializer):
                 OrderItem.objects.create(order=instance, **item_data)
 
         return instance
-
-    
