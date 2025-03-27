@@ -13,7 +13,7 @@ const Page = () => {
         <div className="flex flex-col gap-4 p-60">
             <Checkbox label="Check me" className="flex items-center space-x-2" />
             <TextInputShort
-                content=""
+                value=""
                 onChange={() => {}}
                 placeholder="Enter text"
                 className="rounded-md border border-gray-300"

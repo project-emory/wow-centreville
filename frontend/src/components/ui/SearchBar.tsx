@@ -35,7 +35,7 @@ const SearchBar = ({
         <div className="inline-flex items-center whitespace-nowrap">
             {/* Use the TextInputShort component for the input field */}
             <TextInputShort
-                content={value}
+                value={value}
                 onChange={handleInputChange} // Passing input change handler to TextInputShort
                 placeholder={placeholder}
                 className={`flex-shrink-0 rounded-md border border-gray-300 ${className}`} // Make the input take up available space
