@@ -14,9 +14,26 @@ django.setup()
 def create_superuser(): 
     from api.models import User 
 
-    user = User.objects.create_superuser(phone_number="1231231231", username="Test_Superuser", password="123")
+    user = User.objects.create_superuser(phone_number="2222222222", username="Test_Superuser", password="123")
     print(user.username)
     print(user.is_superuser)
+    print(user.is_staff)
+
+def create_staff(): 
+    from api.models import User 
+
+    user = User.objects.create_staff(phone_number="1111111111", username="Test_Staff", password="123")
+    print(user.username)
+    print(user.is_superuser)
+    print(user.is_staff)
+
+def create_user(): 
+    from api.models import User 
+
+    user = User.objects.create_user(phone_number="0000000000", username="Test_User"s, password="123")
+    print(user.username)
+    print(user.is_superuser)
+    print(user.is_staff)
 
 def get_user():
     from api.models import User
@@ -49,4 +66,4 @@ def get_user():
 
 
 if __name__ == "__main__":
-    create_superuser()
+    create_superuser(), create_user(), create_staff()

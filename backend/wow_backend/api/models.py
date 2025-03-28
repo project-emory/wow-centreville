@@ -17,19 +17,32 @@ class UserManager(BaseUserManager):
         if not phone_number:
             raise ValueError("The phone_number field must be set!")
         user: "User" = self.model(
-            phone_number=phone_number, username=username, **extra_fields
+            phone_number=phone_number, username=username, is_staff = False, **extra_fields
         )
-        #user.is_staff = True
         user.set_password(password)
         user.save(using=self._db)
         return user
 
+    def create_staff(
+        self, phone_number: str, username: str, password=None, **extra_fields
+    ) -> "User":
+        if not phone_number:
+            raise ValueError("The phone_number field must be set!")
+        user: "User" = self.model(
+            phone_number=phone_number, username=username, **extra_fields
+        )
+        user.is_staff = True
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
     def create_superuser(
         self, phone_number: str, username: str, password=None, **extra_fields
     ) -> "User":
         user = self.create_user(phone_number, username, password, **extra_fields)
         user.is_admin = True
         user.is_superuser = True
+        user.is_staff = True
         user.save(using=self._db)
         return user
 
@@ -52,8 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin): #AbstractBaseUser inherits from 
     verified = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=True) # TODO: Only pre-defined in AbstractUser, , should be removed once after deployment
+    is_admin = models.BooleanField(default=False) # flag for admin users 
+    is_staff = models.BooleanField(default=False) # must be set to True for admin panel access
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
