@@ -139,7 +139,7 @@ class OrderViewSet(
         serializer.save()
 
     def update(self, request, *args, **kwargs):
-        typeofrequest = request.method == "PATCH"
+        partial = request.method == "PATCH"
         instance = self.get_object()
 
         # Check if the order can be updated
