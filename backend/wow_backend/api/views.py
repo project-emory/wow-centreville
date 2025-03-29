@@ -118,8 +118,7 @@ class OrderViewSet(
 
     def create(self, request, *args, **kwargs):
         """Create an order with the provided data."""
-        # If user is authenticated, use their ID
-        # TODO: replace with only auth user id once auth implemented
+        # TODO: change to only use authenticated user
         if request.user.is_authenticated:
             request.data["user"] = request.user.id
 
@@ -150,9 +149,7 @@ class OrderViewSet(
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        serializer = self.get_serializer(
-            instance, data=request.data, partial=typeofrequest
-        )
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 

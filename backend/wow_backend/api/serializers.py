@@ -122,7 +122,6 @@ class OrderSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             # Create the Order first
             order = Order.objects.create(user=user, **validated_data)
-            print(OrderSerializer(order).data)
 
             # For each order item, explicitly pass the IDs
             for item_data in order_items_data:
