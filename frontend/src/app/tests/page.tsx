@@ -4,7 +4,7 @@ import React from "react";
 import Checkbox from "@/src/components/ui/Checkbox";
 import TextInputShort from "@/src/components/ui/ShortInput";
 import { SearchBar, TextInputLong } from "@/src/components";
-import RadioButton from "@/src/components/ui/RadioButton";
+import { RadioButton, RadioButtonGroup } from "@/src/components/ui/RadioButton";
 import Quantity from "@/src/components/ui/Quantity";
 import WeekSelector from "@/src/components/ui/WeekSelector";
 
@@ -29,7 +29,7 @@ const Page = () => {
             />
             <SearchBar className="rounded-md border border-gray-300" onSearch={() => {}} />
 
-            <RadioButton />
+            <RadioButtonGroup />
 
             <Quantity />
 

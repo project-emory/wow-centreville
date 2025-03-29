@@ -47,4 +47,4 @@ const RadioButton = ({
     );
 };
 
-export default RadioButtonGroup;
+export { RadioButtonGroup, RadioButton };
