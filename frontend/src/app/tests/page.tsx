@@ -4,14 +4,14 @@ import React from "react";
 import Checkbox from "@/src/components/ui/Checkbox";
 import TextInputShort from "@/src/components/ui/ShortInput";
 import { SearchBar, TextInputLong } from "@/src/components";
-import { RadioButton, RadioButtonGroup } from "@/src/components/ui/RadioButton";
+import RadioButtonGroup from "@/src/components/ui/RadioButton";
 import Quantity from "@/src/components/ui/Quantity";
 import WeekSelector from "@/src/components/ui/WeekSelector";
 
 const Page = () => {
     return (
         <div className="flex flex-col gap-4 p-60">
-            <Checkbox label="Check me" className="flex items-center space-x-2" />
+            <Checkbox />
             <TextInputShort
                 value=""
                 onChange={() => {}}
