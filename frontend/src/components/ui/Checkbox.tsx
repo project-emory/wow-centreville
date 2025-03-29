@@ -36,7 +36,7 @@ const Checkbox = ({
         >
             {/* Checkbox Box */}
             <div
-                className={`mr-2 flex items-center justify-center sm:h-5 sm:w-5 lg:h-6 lg:w-6 border-2 ${
+                className={`mr-2 flex items-center justify-center border-2 sm:h-5 sm:w-5 lg:h-6 lg:w-6 ${
                     isChecked ? "border-wow-red" : "border-black"
                 } rounded-sm`}
             >
@@ -75,45 +75,45 @@ const CheckboxGroup = () => {
                 label: newCheckboxLabel,
                 value: `option${checkboxes.length + 1}`,
             };
-            setCheckboxes((prevCheckboxes) => [...prevCheckboxes, newCheckbox]);
+            setCheckboxes(prevCheckboxes => [...prevCheckboxes, newCheckbox]);
             setNewCheckboxLabel(""); // Clear the input field
         }
     };
 
     // Function to remove the last checkbox
     const removeCheckbox = () => {
-        setCheckboxes((prevCheckboxes) => prevCheckboxes.slice(0, -1));
+        setCheckboxes(prevCheckboxes => prevCheckboxes.slice(0, -1));
     };
 
     // Function to handle selection/deselection of checkboxes
     const handleCheckboxChange = (value: string) => {
-        setSelectedValues((prevSelectedValues) =>
+        setSelectedValues(prevSelectedValues =>
             prevSelectedValues.includes(value)
-                ? prevSelectedValues.filter((val) => val !== value)
-                : [...prevSelectedValues, value]
+                ? prevSelectedValues.filter(val => val !== value)
+                : [...prevSelectedValues, value],
         );
     };
 
     return (
         <div>
             {/* Input and Buttons for adding/removing checkboxes */}
-            <div className="flex items-center mb-4 gap-2 flex-wrap">
+            <div className="mb-4 flex flex-wrap items-center gap-2">
                 <input
                     type="text"
                     value={newCheckboxLabel}
-                    onChange={(e) => setNewCheckboxLabel(e.target.value)}
+                    onChange={e => setNewCheckboxLabel(e.target.value)}
                     placeholder="Checkbox Label"
-                    className="p-2 border border-gray-300 rounded-md"
+                    className="rounded-md border border-gray-300 p-2"
                 />
                 <button
                     onClick={addCheckbox}
-                    className="p-2 bg-[#E56E0D] text-white rounded-md flex-shrink-0"
+                    className="flex-shrink-0 rounded-md bg-[#E56E0D] p-2 text-white"
                 >
                     Add Checkbox
                 </button>
                 <button
                     onClick={removeCheckbox}
-                    className="p-2 bg-[#AD4F02] text-white rounded-md flex-shrink-0"
+                    className="flex-shrink-0 rounded-md bg-[#AD4F02] p-2 text-white"
                 >
                     Remove Last Checkbox
                 </button>
@@ -121,7 +121,7 @@ const CheckboxGroup = () => {
 
             {/* Checkbox Group */}
             <div className="space-y-2">
-                {checkboxes.map((checkbox) => (
+                {checkboxes.map(checkbox => (
                     <Checkbox
                         key={checkbox.value}
                         label={checkbox.label}

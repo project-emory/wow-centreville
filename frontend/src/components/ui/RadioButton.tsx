@@ -50,36 +50,36 @@ const RadioButtonGroup = () => {
                 label: newButtonLabel,
                 value: `option${radioButtons.length + 1}`,
             };
-            setRadioButtons((prevButtons) => [...prevButtons, newButton]);
+            setRadioButtons(prevButtons => [...prevButtons, newButton]);
             setNewButtonLabel(""); // Clear the input field
         }
     };
 
     // Function to remove the last radio button
     const removeRadioButton = () => {
-        setRadioButtons((prevButtons) => prevButtons.slice(0, -1));
+        setRadioButtons(prevButtons => prevButtons.slice(0, -1));
     };
 
     return (
         <div>
             {/* Input and Buttons for adding/removing radio buttons */}
-            <div className="flex items-center mb-4 gap-2 flex-wrap">
+            <div className="mb-4 flex flex-wrap items-center gap-2">
                 <input
                     type="text"
                     value={newButtonLabel}
-                    onChange={(e) => setNewButtonLabel(e.target.value)}
+                    onChange={e => setNewButtonLabel(e.target.value)}
                     placeholder="Radio Button Label"
-                    className="p-2 border border-gray-300 rounded-md"
+                    className="rounded-md border border-gray-300 p-2"
                 />
                 <button
                     onClick={addRadioButton}
-                    className="p-2 bg-[#E56E0D] text-white rounded-md flex-shrink-0"
+                    className="flex-shrink-0 rounded-md bg-[#E56E0D] p-2 text-white"
                 >
                     Add Radio Button
                 </button>
                 <button
                     onClick={removeRadioButton}
-                    className="p-2 bg-[#AD4F02] text-white rounded-md flex-shrink-0"
+                    className="flex-shrink-0 rounded-md bg-[#AD4F02] p-2 text-white"
                 >
                     Remove Last Radio Button
                 </button>
@@ -87,7 +87,7 @@ const RadioButtonGroup = () => {
 
             {/* Radio Group */}
             <div className="space-y-2">
-                {radioButtons.map((button) => (
+                {radioButtons.map(button => (
                     <RadioButton
                         key={button.value}
                         label={button.label}
