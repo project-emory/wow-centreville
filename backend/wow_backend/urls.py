@@ -27,6 +27,4 @@ router.register(r"orders", OrderViewSet, basename="orders")
 router.register(r"menu-items", MenuItemViewSet, basename="menu-items")
 router.register("login", LoginViewSet, basename="login")
 
-urlpatterns = router.urls + [
-    path("admin/", admin.site.urls)
-]
+urlpatterns = router.urls + [path("admin/", admin.site.urls)]

@@ -11,40 +11,50 @@ os.environ.setdefault(
 # Initialize Django
 django.setup()
 
-def create_superuser(): 
-    from api.models import User 
 
-    user = User.objects.create_superuser(phone_number="2222222222", username="Test_Superuser", password="123")
+def create_superuser():
+    from api.models import User
+
+    user = User.objects.create_superuser(
+        phone_number="2222222222", username="Test_Superuser", password="123"
+    )
     print(user.username)
     print(user.is_superuser)
     print(user.is_staff)
 
-def create_staff(): 
-    from api.models import User 
 
-    user = User.objects.create_staff(phone_number="1111111111", username="Test_Staff", password="123")
+def create_staff():
+    from api.models import User
+
+    user = User.objects.create_staff(
+        phone_number="1111111111", username="Test_Staff", password="123"
+    )
     print(user.username)
     print(user.is_superuser)
     print(user.is_staff)
 
-def create_user(): 
-    from api.models import User 
 
-    user = User.objects.create_user(phone_number="0000000000", username="Test_User"s, password="123")
+def create_user():
+    from api.models import User
+
+    user = User.objects.create_user(
+        phone_number="0000000000", username="Test_User", password="123"
+    )
     print(user.username)
     print(user.is_superuser)
     print(user.is_staff)
+
 
 def get_user():
     from api.models import User
 
-    user = User.objects.get(id = '1')
+    user = User.objects.get(id="1")
     print(user.username)
     print(user.is_superuser)
     print(user.is_staff)
     print(user.is_admin)
 
-    
+
 # def main():
 #     # Now import your serializers and models
 #     from backend.wow_backend.api.models import User, MenuItem, Order, OrderItem  # noqa: E402

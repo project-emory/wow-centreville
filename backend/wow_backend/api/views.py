@@ -15,6 +15,7 @@ from .serializers import (
 
 from rest_framework.permissions import IsAdminUser, AllowAny
 
+
 class UserViewSet(
     ModelViewSet,
 ):
@@ -190,33 +191,33 @@ class MenuItemViewSet(
             else items
         )
         return items
-    
+
     def create(self, request, *args, **kwargs):
-        if not request.user.is_staff: # double check user status
+        if not request.user.is_staff:  # double check user status
             return Response(
                 {"Error": "Only admins have access to create menu items."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        if not request.user.is_staff: # double check user status
+        if not request.user.is_staff:  # double check user status
             return Response(
                 {"Error": "Only admins have access to update menu items."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
         return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        if not request.user.is_staff: # double check user status
+        if not request.user.is_staff:  # double check user status
             return Response(
                 {"Error": "Only admins have access to delete menu items."},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
         return super().destroy(request, *args, **kwargs)
 
     # src: https://www.django-rest-framework.org/api-guide/viewsets/#introspecting-viewset-actions
-    def get_permissions(self): 
+    def get_permissions(self):
         if self.action in ["list", "retrieve"]:
-            return [AllowAny()]  
-        return [IsAdminUser()]  
+            return [AllowAny()]
+        return [IsAdminUser()]

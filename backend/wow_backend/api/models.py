@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
         if not phone_number:
             raise ValueError("The phone_number field must be set!")
         user: "User" = self.model(
-            phone_number=phone_number, username=username, is_staff = False, **extra_fields
+            phone_number=phone_number, username=username, is_staff=False, **extra_fields
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
     def create_superuser(
         self, phone_number: str, username: str, password=None, **extra_fields
     ) -> "User":
@@ -53,10 +53,12 @@ def phone_validator(number: str):
         raise ValidationError("Phone number must be between 10 and 15 digits.")
 
 
-class User(AbstractBaseUser, PermissionsMixin): #AbstractBaseUser inherits from models.Model
+class User(
+    AbstractBaseUser, PermissionsMixin
+):  # AbstractBaseUser inherits from models.Model
     """Model for site users."""
 
-    id = models.AutoField(primary_key=True) 
+    id = models.AutoField(primary_key=True)
     phone_number = models.CharField(
         max_length=15, unique=True, validators=[phone_validator]
     )
@@ -65,8 +67,10 @@ class User(AbstractBaseUser, PermissionsMixin): #AbstractBaseUser inherits from 
     verified = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False) # flag for admin users 
-    is_staff = models.BooleanField(default=False) # must be set to True for admin panel access
+    is_admin = models.BooleanField(default=False)  # flag for admin users
+    is_staff = models.BooleanField(
+        default=False
+    )  # must be set to True for admin panel access
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -126,13 +130,11 @@ class Order(models.Model):
         return order_item
 
     def clean(self):
-
         super().clean()
-        
+
         if self.pk and not self.is_paid:
             # Delete all OrderItems with unavailable menu items.
             self.order_items.filter(menu_item__is_available=False).delete()
-
 
     # def clean(self):
     #     """Remove any unavailable items from unfulfilled orders."""
