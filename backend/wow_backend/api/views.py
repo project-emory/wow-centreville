@@ -3,7 +3,6 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-
 from django.contrib.auth import authenticate
 
 from .models import MenuItem, Order, User
@@ -120,14 +119,59 @@ class OrderViewSet(
         # return orders.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        # needs to take self.request.user in account
-        return super().create(request, *args, **kwargs)
+        """Create an order with the provided data."""
+        # TODO: change to only use authenticated user
+        if request.user.is_authenticated:
+            request.data["user"] = request.user.id
+
+        # Validate and create the order
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Call the create method on the serializer
+        self.perform_create(serializer)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+    def perform_create(self, serializer):
+        """Perform the creation of the order."""
+        serializer.save()
 
     def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+        partial = request.method == "PATCH"
+        instance = self.get_object()
+
+        # Check if the order can be updated
+        if instance.is_paid and not request.user.is_admin:
+            return Response(
+                {"detail": "Cannot update a paid order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        """Delete an order instance."""
+        instance = self.get_object()
+
+        # Check if the order can be deleted
+        if instance.is_paid and not request.user.is_admin:
+            return Response(
+                {"detail": "Cannot delete a paid order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        self.perform_destroy(instance)
+        return Response(
+            {"message": "Order deleted successfully."}, status=status.HTTP_200_OK
+        )
 
 
 class MenuItemViewSet(
